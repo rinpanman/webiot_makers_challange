@@ -13,56 +13,61 @@
 
         <script type="text/javascript">
             
-            // document.addEventListener("deviceready", function(){
-            function get_position(){
-                
-                var lgn, lat;
-                
-                var onSuccess = function(position){
-                    document.getElementById("show_position").innerHTML = 
-                    "Longitude:" + position.coords.longitude + "\n" +  // 経度
-                    "Latitude:" + position.coords.latitude;  // 緯度
-                    
-                    lgn = position.coords.longtitude;
-                    lat = position.coords.latitude;
-                    
-                    return []
-                   
-                };
-               
-                var onError = function(message){
-                    alert("Failed to get the current position.");
-                };
-               
-                var option = {
-                    frequency: 5000,
-                    timeout: 6000
-                };
+            var message;
+ 
+            // 位置情報取得
+            function start_func(){
+                get_location();
+            }
+            
+            function get_location(){
+                // document.getElementById("area_name").innerHTML = "位置情報取得します";
+                if (navigator.geolocation) {
+                    // 現在の位置情報取得を実施 正常に位置情報が取得できると、
+                    // successCallbackがコールバックされます。
+                    navigator.geolocation.getCurrentPosition
+                    (successCallback,errorCallback);
+                } else {
+                    message = "本ブラウザではGeolocationが使えません";
+                    // document.getElementById("area_name").innerHTML = message;
+                }
+            }
+            // ( 2 )位置情報が正常に取得されたら
+            function successCallback(pos) {
+                var Potition_latitude = pos.coords.latitude;
+                var Potition_longitude = pos.coords.longitude;
                  
-                navigator.geolocation.getCurrentPosition(onSuccess, onError, option);
-            });
-        
-            function initialize() {
+                // 位置情報が取得出来たらGoogle Mapを表示する
+                initialize(Potition_latitude,Potition_longitude);
+            }
+             
+            function errorCallback(error) {
+                message = "位置情報が許可されていません";
+                // document.getElementById("area_name").innerHTML = message;
+            }
+             
+            // ( 3 )Google Map API を使い、地図を読み込み
+            function initialize(x,y) {
+                // document.getElementById("area_name").innerHTML = 'google map情報を取得中';
+                 
+                // Geolocationで取得した座標を代入
+                var myLatlng = new google.maps.LatLng(x,y);
                 var mapOptions = {
-                    center: new google.maps.LatLng(lat, lgn),    //地図上で表示させる緯度経度
-                    
-                    zoom: 14,                                                 //地図の倍率
-                    mapTypeId: google.maps.MapTypeId.ROADMAP                  //地図の種類
-                };
-
-                var map = new google.maps.Map(document.getElementById("map_canvas"),
-                                          mapOptions);
-
+                    zoom: 17,
+                    center: myLatlng,
+                    //mapTypeId: google.maps.MapTypeId.HYBRID
+                }
+                
+                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
             }
         </script>
     </head>
 
-    <body onload="initialize()">
+    <body onload="start_func()">
 
         <!-- 地図の描画領域 -->
-        <div id="map_canvas" style="width:367px; height:500px"></div>
+        <div id="map_canvas" style="width:367px; height:400px"></div>
         
         <div id="show_position"></div>
-
     </body>
 </html>
