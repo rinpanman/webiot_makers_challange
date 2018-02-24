@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+        <script type="text/javascript" charset="utf-8" src="components/loader.js"></script>
+
+        <!-- Google Map API -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVXTQtga5_XEeXLnPKe55XDyvJnc32Dzs&sensor=false"
+                type="text/javascript"
+                charset="UTF-8">
+        </script>
+
+        <script type="text/javascript">
+            
+            // document.addEventListener("deviceready", function(){
+            function get_position(){
+                
+                var lgn, lat;
+                
+                var onSuccess = function(position){
+                    document.getElementById("show_position").innerHTML = 
+                    "Longitude:" + position.coords.longitude + "\n" +  // 経度
+                    "Latitude:" + position.coords.latitude;  // 緯度
+                    
+                    lgn = position.coords.longtitude;
+                    lat = position.coords.latitude;
+                    
+                    return []
+                   
+                };
+               
+                var onError = function(message){
+                    alert("Failed to get the current position.");
+                };
+               
+                var option = {
+                    frequency: 5000,
+                    timeout: 6000
+                };
+                 
+                navigator.geolocation.getCurrentPosition(onSuccess, onError, option);
+            });
+        
+            function initialize() {
+                var mapOptions = {
+                    center: new google.maps.LatLng(lat, lgn),    //地図上で表示させる緯度経度
+                    
+                    zoom: 14,                                                 //地図の倍率
+                    mapTypeId: google.maps.MapTypeId.ROADMAP                  //地図の種類
+                };
+
+                var map = new google.maps.Map(document.getElementById("map_canvas"),
+                                          mapOptions);
+
+            }
+        </script>
+    </head>
+
+    <body onload="initialize()">
+
+        <!-- 地図の描画領域 -->
+        <div id="map_canvas" style="width:367px; height:500px"></div>
+        
+        <div id="show_position"></div>
+
+    </body>
+</html>
