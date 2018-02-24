@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="components/loader.css">
+    
+    <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
+    
+    <script src="components/loader.js"></script>
+    <script>
+        
+ //        var tag = document.createElement('script');
+ // 
+ //        tag.src = "https://www.youtube.com/iframe_api";
+ //        var firstScriptTag = document.getElementsByTagName('script')[0];
+ //        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        function onYouTubeIframeAPIReady() {
+            // 埋め込みたい動画のIDを入れた配列を準備する
+            var videoIdArray = ['9Sg24qRRoyo', 'OTUtF7ZxRN8', '4KUA-1DvQZk', '7wKjv4eLQ7s', 'MmhuiG8O2SQ'];
+            // YT.Playerオブジェクトを格納するオブジェクト作る
+            var ytplayers = {};
+            // プレーヤーのロードを実行
+            loadPlayer(videoIdArray);
+            // YT.Playerを生成する関数
+            var playerId;
+            function loadPlayer(ids) {
+                // 引数で受け取った配列をfor in文でまわす
+                for (var i in ids) {
+                    var videoId = ids[i],
+                    playerId = "player_" + videoId;
+                    
+                    var insert = document.getElementById('link');
+                    insert.insertAdjacentHTML('beforebegin','<div id="' + playerId + '">BeforeBegin</div>');
+                    
+                    playerId = new YT.Player(
+                        playerId, { // 最初の引数に挿入したいHTML要素のidを指定する
+                            width: "367",
+                            height: "186",
+                            videoId: videoId
+                        }
+                    );
+                    // YT.Playerオブジェクトを格納する
+                    ytplayers[videoId] = playerId;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- TODO: Please edit here -->
+    <a href="./index.html" id="link">トップに戻る</a>
+</body>
+</html>
