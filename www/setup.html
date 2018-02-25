@@ -5,16 +5,106 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+    
     <script src="components/loader.js"></script>
     <script>
         //
         // TODO: Write JavaScript code here
         //
     </script>
+    
+    <script type="text/javascript" charset="utf-8">
+
+        // watchID refers to current "watchHeading"
+        var watchID = null;
+
+        // Wait until Cordova loading completed
+        document.addEventListener("deviceready", onDeviceReady, false);
+    
+        // Cordova is ready
+        function onDeviceReady() {
+            startWatch();
+        }
+    
+        // Start monitoring the compass
+        function startWatch() {
+    
+            // Update the compass every 3 seconds
+            var options = { frequency: 3000 };
+    
+            watchID = navigator.compass.watchHeading(onSuccess, onError, options);
+        }
+    
+        // Stop monitoring the compass
+        function stopWatch() {
+            if (watchID) {
+                navigator.compass.clearWatch(watchID);
+                watchID = null;
+            }
+        }
+    
+        // onSuccess: Get the current orientation
+        function onSuccess(heading) {
+            var element = document.getElementById('heading');
+            element.innerHTML = 'Orientation: ' + heading.magneticHeading;
+        }
+    
+        // onError: Failed to get the orientation
+        function onError(compassError) {
+            alert('Compass encountered an error: ' + compassError.code);
+        }
+    </script>
 </head>
 <body>
     <!-- TODO: Please edit here -->
-    <a href="./index.html" id="link">トップに戻る</a>
+    
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="./index.html">いのしし</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="./index.html">いのししmap</a></li>
+                    <li><a href="./watch_video.html">出現動画</a></li>
+                    <li class="active"><a href="./setup.html">センサーの設置</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container-fluid text-center">    
+        <div class="row content">
+            <div class="col-sm-8 text-left">
+                <div id="heading">Waiting for direction...</div>
+                <button onclick="startWatch();">Start getting the orientation</button><br/>
+                <button onclick="stopWatch();">Stop getting the orientation</button>
+                
+                <hr />
+                
+                <button>位置情報登録</button>
+                
+                <hr>
+                <h3>description</h3>
+                <p>センサーを設置してください</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="container-fluid text-center">
+        <p>Team ぽちこちゃん</p>
+    </footer>
 
 </body>
 </html>
